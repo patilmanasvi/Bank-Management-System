@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transfer – Bank</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Bank</h1>
+    <div>Welcome, User | <a href="login.html" style="color:#fff;">Logout</a></div>
+  </header>
+  <nav class="sidebar">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="deposit.html">Deposit</a>
+    <a href="withdraw.html">Withdraw</a>
+    <a href="transfer.html" class="active">Transfer</a>
+    <a href="transactions.html">Transaction History</a>
+  </nav>
+  <main class="main-content">
+    <h2>Transfer Funds</h2>
+    <form id="transferForm">
+      <label for="from">From Account</label>
+      <input type="text" id="from" name="from" required />
+
+      <label for="to">To Account</label>
+      <input type="text" id="to" name="to" required />
+
+      <label for="amount">Amount (₹)</label>
+      <input type="number" id="amount" name="amount" min="0" step="0.01" required />
+
+      <button type="submit">Transfer</button>
+    </form>
+    <p id="msg" class="success" style="display:none; margin-top:12px;"></p>
+  </main>
+  <script>
+    document.getElementById('transferForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const from = document.getElementById('from').value.trim();
+      const to = document.getElementById('to').value.trim();
+      const amt = parseFloat(document.getElementById('amount').value);
+      if (!from || !to || isNaN(amt) || amt <= 0) {
+        document.getElementById('msg').textContent = 'Please fill all fields with valid values.';
+        document.getElementById('msg').className = 'error';
+        document.getElementById('msg').style.display = 'block';
+        return;
+      }
+      // Placeholder for real API call; would handle atomic DB transaction.
+      document.getElementById('msg').textContent = `₹ ${amt.toFixed(2)} transferred from ${from} to ${to}.`;
+      document.getElementById('msg').className = 'success';
+      document.getElementById('msg').style.display = 'block';
+      this.reset();
+    });
+  </script>
+</body>
+</html>
