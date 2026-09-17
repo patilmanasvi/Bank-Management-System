@@ -1,0 +1,11 @@
+# macOS Finder metadata
+.DS_Store
+
+# Java compiled output (if you ever build)
+/target/
+*.class
+
+# IDE specific files
+.idea/
+*.iml
+.vscode/
