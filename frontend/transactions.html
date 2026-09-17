@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transaction History – Bank</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Bank</h1>
+    <div>Welcome, User | <a href="login.html" style="color:#fff;">Logout</a></div>
+  </header>
+  <nav class="sidebar">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="deposit.html">Deposit</a>
+    <a href="withdraw.html">Withdraw</a>
+    <a href="transfer.html">Transfer</a>
+    <a href="transactions.html" class="active">Transaction History</a>
+  </nav>
+  <main class="main-content">
+    <h2>Transaction History</h2>
+    <form id="filterForm" style="margin-bottom:16px;">
+      <label for="startDate">From</label>
+      <input type="date" id="startDate" name="startDate" />
+
+      <label for="endDate">To</label>
+      <input type="date" id="endDate" name="endDate" />
+
+      <label for="type">Type</label>
+      <select id="type" name="type">
+        <option value="all">All</option>
+        <option value="credit">Credit (+)</option>
+        <option value="debit">Debit (-)</option>
+      </select>
+
+      <button type="submit" class="secondary" style="margin-top:8px;">Apply Filters</button>
+    </form>
+    <table id="txnTable">
+      <thead>
+        <tr><th>Date</th><th>Description</th><th class="amount">Amount</th><th>Balance</th></tr>
+      </thead>
+      <tbody>
+        <!-- Sample rows; in a real app these would be populated from the backend -->
+        <tr><td>2026-09-15</td><td>Salary Credit</td><td class="amount">+ 45,000.00</td><td>₹ 84,230.50</td></tr>
+        <tr><td>2026-09-14</td><td>Utility Bill</td><td class="amount">- 3,200.00</td><td>₹ 39,230.50</td></tr>
+        <tr><td>2026-09-13</td><td>Grocery</td><td class="amount">- 5,600.00</td><td>₹ 42,430.50</td></tr>
+        <tr><td>2026-09-12</td><td>Transfer to 1234567890</td><td class="amount">- 2,000.00</td><td>₹ 48,030.50</td></tr>
+      </tbody>
+    </table>
+    <p id="noResults" style="display:none; color:var(--color-secondary-text);">No transactions match the selected criteria.</p>
+  </main>
+  <script>
+    // Simple client‑side filter for demo purposes
+    const rows = Array.from(document.querySelectorAll('#txnTable tbody tr'));
+    document.getElementById('filterForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const start = document.getElementById('startDate').value;
+      const end = document.getElementById('endDate').value;
+      const type = document.getElementById('type').value;
+      let visibleCount = 0;
+      rows.forEach(row => {
+        const date = row.cells[0].textContent;
+        const amountText = row.cells[2].textContent.trim();
+        const isCredit = amountText.startsWith('+');
+        const isDebit = amountText.startsWith('-');
+        let show = true;
+        if (start && date < start) show = false;
+        if (end && date > end) show = false;
+        if (type === 'credit' && !isCredit) show = false;
+        if (type === 'debit' && !isDebit) show = false;
+        row.style.display = show ? '' : 'none';
+        if (show) visibleCount++;
+      });
+      document.getElementById('noResults').style.display = visibleCount === 0 ? '' : 'none';
+    });
+  </script>
+</body>
+</html>
