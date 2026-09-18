@@ -29,15 +29,14 @@
       <button type="submit">Sign In</button>
     </form>
 
-<p style="margin-top:12px;">Don't have an account? <a href="signup.html">Create one</a></p>
+  <p style="margin-top:12px;">Don't have an account? <a href="signup.html">Create one</a></p>
+  <div style="margin-top:20px; font-size:13px; color:#333; background:#f0f4f8; border:1px solid #d0dbe5; padding:12px; border-radius:6px; line-height:1.6;">
+    <strong>Demo Test Credentials:</strong><br>
+    Customer: <code>customer@example.com</code> / <code>password123</code><br>
+    Employee: <code>employee@example.com</code> / <code>password123</code><br>
+    Admin: <code>admin@example.com</code> / <code>password123</code>
+  </div>
   </main>
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const role = document.getElementById('role').value;
-      // For demo purposes, redirect to dashboard after login
-      location.href = 'dashboard.html';
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>

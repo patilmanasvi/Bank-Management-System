@@ -22,32 +22,19 @@
     <h2>Deposit Funds</h2>
     <form id="depositForm">
       <label for="account">Account Number</label>
-      <input type="text" id="account" name="account" required />
+      <input type="text" id="account" name="account" value="ACC100101" readonly />
 
       <label for="amount">Amount (₹)</label>
-      <input type="number" id="amount" name="amount" min="0" step="0.01" required />
+      <input type="number" id="amount" name="amount" min="1" step="0.01" placeholder="Enter deposit amount" required />
 
       <button type="submit">Deposit</button>
     </form>
     <p id="msg" class="success" style="display:none; margin-top:12px;"></p>
   </main>
+  <script src="app.js"></script>
   <script>
-    document.getElementById('depositForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const acct = document.getElementById('account').value.trim();
-      const amt = parseFloat(document.getElementById('amount').value);
-      if (!acct || isNaN(amt) || amt <= 0) {
-        document.getElementById('msg').textContent = 'Please provide valid details.';
-        document.getElementById('msg').className = 'error';
-        document.getElementById('msg').style.display = 'block';
-        return;
-      }
-      // Placeholder for real API call
-      document.getElementById('msg').textContent = `₹ ${amt.toFixed(2)} deposited to ${acct}.`;
-      document.getElementById('msg').className = 'success';
-      document.getElementById('msg').style.display = 'block';
-      this.reset();
-    });
+    const u = getSession();
+    if (u && u.accountNumber) document.getElementById('account').value = u.accountNumber;
   </script>
 </body>
 </html>

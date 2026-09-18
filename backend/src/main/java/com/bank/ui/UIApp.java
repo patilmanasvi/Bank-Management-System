@@ -7,6 +7,7 @@ import com.bank.service.TransactionService;
 import com.bank.model.Transaction;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.math.BigDecimal;

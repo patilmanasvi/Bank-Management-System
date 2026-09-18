@@ -3,6 +3,8 @@
 
 # Java compiled output (if you ever build)
 /target/
+/bin/
+backend/bin/
 *.class
 
 # IDE specific files
