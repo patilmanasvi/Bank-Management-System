@@ -3,38 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard – Bank</title>
+  <title>Dashboard – Bank Management System</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>Bank</h1>
-    <div><span id="dashboardUser">Welcome, User | </span><a href="login.html" style="color:#fff;">Logout</a></div>
+    <h1>Bank Management System</h1>
+    <div>
+      <span id="headerRoleBadge" class="badge active" style="margin-right:6px;">CUSTOMER</span>
+      <span id="dashboardUser">Welcome, User | </span>
+      <a href="login.html" id="btnLogout">Logout</a>
+    </div>
   </header>
-  <nav class="sidebar">
-    <a href="dashboard.html" class="active">Dashboard</a>
-    <a href="deposit.html">Deposit</a>
-    <a href="withdraw.html">Withdraw</a>
-    <a href="transfer.html">Transfer</a>
-    <a href="transactions.html">Transaction History</a>
-  </nav>
+  <nav class="sidebar" id="mainSidebar"></nav>
   <main class="main-content">
-    <section>
-      <h2>Account Balance</h2>
-      <p id="dashboardBalance" style="font-size:24px; font-weight:bold; color:#0b6623;">₹ 80,000.00</p>
-    </section>
-    <section>
-      <h2>Recent Transactions</h2>
-      <table id="recentTransactions">
-        <thead>
-          <tr><th>Date</th><th>Description</th><th class="amount">Amount</th><th>Balance</th></tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="4">Loading recent transactions from database...</td></tr>
-        </tbody>
-      </table>
-      <p><a href="transactions.html">View all transactions</a></p>
-    </section>
+    <div id="dashboardBanner"></div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 700px; margin-bottom: 24px;">
+      <div style="background: #fff; padding: 20px 24px; border-radius: 8px; border: 1px solid #dde2e8; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+        <p style="font-size: 13px; color: #5B6B7E; margin-bottom: 6px; font-weight: 600;">Account Balance</p>
+        <p id="dashboardBalance" style="font-size: 28px; font-weight: 700; color: #1F7A4D; font-family: 'Consolas', monospace;">Loading...</p>
+      </div>
+      <div style="background: #fff; padding: 20px 24px; border-radius: 8px; border: 1px solid #dde2e8; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+        <p style="font-size: 13px; color: #5B6B7E; margin-bottom: 6px; font-weight: 600;">Quick Actions</p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+          <a href="deposit.html" style="text-decoration:none;"><button class="small" style="font-size:13px; padding: 6px 14px;">Deposit</button></a>
+          <a href="transfer.html" style="text-decoration:none;"><button class="small secondary" style="font-size:13px; padding: 6px 14px;">Transfer</button></a>
+          <a href="transactions.html" style="text-decoration:none;"><button class="small secondary" style="font-size:13px; padding: 6px 14px;">History</button></a>
+        </div>
+      </div>
+    </div>
+
+    <h3>Recent Transactions</h3>
+    <table id="recentTransactions">
+      <thead>
+        <tr><th>Date</th><th>Description</th><th class="amount">Amount</th><th>Balance</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="4" style="text-align: center; color: #5B6B7E;">Loading recent transactions...</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 12px; font-size: 13px;"><a href="transactions.html">View all transactions</a></p>
   </main>
   <script src="app.js"></script>
 </body>

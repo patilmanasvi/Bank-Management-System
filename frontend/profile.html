@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile – Bank Management System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Bank Management System</h1>
+    <div>
+      <span id="headerRoleBadge" class="badge active" style="margin-right:6px;">CUSTOMER</span>
+      <span id="headerUser">Welcome, User | </span>
+      <a href="login.html" id="btnLogout">Logout</a>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="mainSidebar"></nav>
+
+  <main class="main-content">
+    <h2>User Profile & Settings</h2>
+    <p style="color:var(--color-secondary-text); margin-bottom: 20px; font-size: 14px;">
+      View your verified bank KYC records, update contact information, and manage your account credentials.
+    </p>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; max-width: 960px;">
+      
+      <!-- Left Column: Personal Information (Editable) -->
+      <div style="background: #fff; padding: 22px 24px; border-radius: 8px; border: 1px solid #dde2e8; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+        <h3 style="margin-bottom: 14px; border-bottom: 1px solid #dde2e8; padding-bottom: 8px;">Personal Information</h3>
+        <form id="profileForm" style="padding: 0; border: none; box-shadow: none; margin-bottom: 0;">
+          <label>Full Name</label>
+          <input type="text" id="profName" readonly />
+
+          <label>Role</label>
+          <input type="text" id="profRole" readonly />
+
+          <label>Assigned Branch</label>
+          <input type="text" id="profBranch" readonly />
+
+          <div id="customerKycFields">
+            <label>PAN Card Number</label>
+            <input type="text" id="profPan" readonly />
+
+            <label>Date of Birth</label>
+            <input type="text" id="profDob" readonly />
+          </div>
+
+          <label for="profPhone">Mobile Phone (Editable)</label>
+          <input type="text" id="profPhone" name="phone" placeholder="Enter 10-digit phone" required />
+
+          <label for="profEmail">Email Address (Editable)</label>
+          <input type="email" id="profEmail" name="email" placeholder="Enter email address" required />
+
+          <label for="profAddress">Residential Address (Editable)</label>
+          <input type="text" id="profAddress" name="address" placeholder="Enter address" required />
+
+          <button type="submit" class="success-btn" style="width: 100%; margin-top: 6px;">Save Profile Changes</button>
+        </form>
+        <p id="profMsg" style="display:none; margin-top: 12px; font-weight: 600;"></p>
+      </div>
+
+      <!-- Right Column: Linked Accounts & Password Security -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Linked Accounts Card -->
+        <div style="background: #fff; padding: 22px 24px; border-radius: 8px; border: 1px solid #dde2e8; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+          <h3 style="margin-bottom: 12px; border-bottom: 1px solid #dde2e8; padding-bottom: 8px;">Linked Bank Accounts</h3>
+          <table id="profAccountsTable" style="margin-top: 0;">
+            <thead>
+              <tr>
+                <th>Account No</th>
+                <th>Type</th>
+                <th class="amount">Balance</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="4" style="text-align: center; color: #5B6B7E;">Loading accounts...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Change Password Card -->
+        <div style="background: #fff; padding: 22px 24px; border-radius: 8px; border: 1px solid #dde2e8; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+          <h3 style="margin-bottom: 12px; border-bottom: 1px solid #dde2e8; padding-bottom: 8px;">Security & Password</h3>
+          <form id="changePasswordForm" style="padding: 0; border: none; box-shadow: none; margin-bottom: 0;">
+            <label for="oldPassword">Current Password</label>
+            <input type="password" id="oldPassword" placeholder="Enter current password" required />
+
+            <label for="newPassword">New Password</label>
+            <input type="password" id="newPassword" placeholder="Minimum 4 characters" required />
+
+            <label for="confirmPassword">Confirm New Password</label>
+            <input type="password" id="confirmPassword" placeholder="Re-enter new password" required />
+
+            <button type="submit" style="width: 100%; margin-top: 6px;">Update Password</button>
+          </form>
+          <p id="pwdMsg" style="display:none; margin-top: 12px; font-weight: 600;"></p>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

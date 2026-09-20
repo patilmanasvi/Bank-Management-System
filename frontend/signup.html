@@ -3,41 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up – Bank</title>
+  <title>Sign Up – Bank Management System</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body style="background: linear-gradient(135deg, #eef2f7 0%, #dce3eb 100%); min-height: 100vh;">
   <header>
-    <h1>Bank</h1>
+    <h1>Bank Management System</h1>
   </header>
-  <main class="main-content" style="max-width: 400px; margin: 40px auto;">
-    <h2>Create Account</h2>
-    <form id="signupForm">
-      <label for="name">Full Name</label>
-      <input type="text" id="name" name="name" required />
+  <main style="max-width: 420px; margin: 48px auto; padding: 0 16px;">
+    <div style="background: #fff; padding: 32px 28px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border: 1px solid #dde2e8;">
+      <h2 style="text-align: center; border-bottom: none; padding-bottom: 4px; margin-bottom: 6px;">Create Account</h2>
+      <p style="text-align: center; color: #5B6B7E; font-size: 13px; margin-bottom: 22px;">Register for internet banking services</p>
+      <form id="signupForm">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="e.g. Aarav Sharma" required />
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required />
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="e.g. aarav@example.com" required />
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" required />
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Create a secure password" required />
 
-      <label for="role">Account type</label>
-      <select id="role" name="role" required>
-        <option value="customer">Customer</option>
-        <option value="employee">Employee</option>
-        <option value="admin">Admin</option>
-      </select>
+        <label for="role">Account Type</label>
+        <select id="role" name="role" required>
+          <option value="customer">Customer</option>
+          <option value="employee">Employee</option>
+          <option value="admin">Admin</option>
+        </select>
 
-      <button type="submit">Register</button>
-    </form>
-    <p style="margin-top:12px;">Already have an account? <a href="login.html">Sign in</a></p>
+        <button type="submit" style="width: 100%; padding: 11px; margin-top: 4px; font-size: 15px;">Register</button>
+      </form>
+
+      <p style="margin-top: 16px; text-align: center; font-size: 13px; color: #5B6B7E;">
+        Already have an account? <a href="login.html">Sign in</a>
+      </p>
+    </div>
   </main>
   <script>
     document.getElementById('signupForm').addEventListener('submit', function (e) {
       e.preventDefault();
-      // In a real app, send data to backend and on success redirect to login.
-      alert('Account created – you can now log in.');
+      alert('Registration submitted successfully. Please sign in with your credentials.');
       location.href = 'login.html';
     });
   </script>

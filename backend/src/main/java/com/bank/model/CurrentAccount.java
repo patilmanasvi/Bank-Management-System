@@ -27,8 +27,8 @@ public class CurrentAccount extends Account {
         if (availableFunds.compareTo(amount) < 0) {
             throw new IllegalStateException("Withdrawal denied: Exceeds overdraft limit of ₹" + OVERDRAFT_LIMIT);
         }
-        // Direct deduction if within balance, else override
-        super.withdraw(amount);
+        // Direct deduction within overdraft limit
+        deduct(amount);
     }
 
     @Override

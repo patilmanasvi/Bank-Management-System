@@ -17,15 +17,16 @@ import java.util.Map;
 
 /**
  * TransactionService - Handles financial transactions.
- * Demonstrates ACID properties (Atomicity, Consistency, Isolation, Durability)
- * through JDBC explicit transaction management (commit & rollback).
+ *
+ * CHANGE from original: transferFunds() debit step now also requires
+ * status = 'ACTIVE' (previously only the credit/receiving side checked this,
+ * so a FROZEN or CLOSED account could still send money out).
  */
 public class TransactionService {
     private final Map<String, List<Transaction>> history = new HashMap<>();
 
     public void record(Account account, Transaction txn) {
         history.computeIfAbsent(account.getNumber(), k -> new ArrayList<>()).add(txn);
-        // Also persist to MySQL database
         String sql = "INSERT INTO transaction (account_number, txn_type, amount, resulting_balance, description) " +
                      "VALUES (?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
@@ -41,15 +42,45 @@ public class TransactionService {
         }
     }
 
-    public List<Transaction> getHistory(String accountNumber) {
+    /**
+     * Returns transaction history for an account, optionally filtered by type
+     * (DEPOSIT/WITHDRAW/TRANSFER) and/or a date range. Pass null to skip a filter.
+     * Task: Transaction Filters & Validation.
+     */
+    public List<Transaction> getHistory(String accountNumber, String typeFilter,
+                                         LocalDate from, LocalDate to) {
         List<Transaction> list = new ArrayList<>();
-        String sql = "SELECT txn_id, account_number, txn_type, amount, resulting_balance, " +
-                     "target_account, description, txn_date FROM transaction " +
-                     "WHERE account_number = ? OR target_account = ? ORDER BY txn_date DESC";
+        StringBuilder sql = new StringBuilder(
+                "SELECT txn_id, account_number, txn_type, amount, resulting_balance, " +
+                "target_account, description, txn_date FROM transaction " +
+                "WHERE (account_number = ? OR target_account = ?) ");
+        if (typeFilter != null && !typeFilter.isBlank()) {
+            sql.append("AND txn_type = ? ");
+        }
+        if (from != null) {
+            sql.append("AND txn_date >= ? ");
+        }
+        if (to != null) {
+            sql.append("AND txn_date < ? ");
+        }
+        sql.append("ORDER BY txn_date DESC");
+
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, accountNumber);
-            ps.setString(2, accountNumber);
+             PreparedStatement ps = con.prepareStatement(sql.toString())) {
+            int idx = 1;
+            ps.setString(idx++, accountNumber);
+            ps.setString(idx++, accountNumber);
+            if (typeFilter != null && !typeFilter.isBlank()) {
+                ps.setString(idx++, typeFilter.toUpperCase());
+            }
+            if (from != null) {
+                ps.setDate(idx++, java.sql.Date.valueOf(from));
+            }
+            if (to != null) {
+                // exclusive upper bound -> use the day after "to" so the whole day is included
+                ps.setDate(idx++, java.sql.Date.valueOf(to.plusDays(1)));
+            }
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 java.sql.Timestamp ts = rs.getTimestamp("txn_date");
@@ -65,7 +96,12 @@ public class TransactionService {
             System.err.println("Fallback to memory history: " + e.getMessage());
             return history.getOrDefault(accountNumber, new ArrayList<>());
         }
-        return list.isEmpty() ? history.getOrDefault(accountNumber, new ArrayList<>()) : list;
+        return list;
+    }
+
+    /** Backward-compatible overload: no filters. */
+    public List<Transaction> getHistory(String accountNumber) {
+        return getHistory(accountNumber, null, null, null);
     }
 
     /**
@@ -81,7 +117,8 @@ public class TransactionService {
             throw new IllegalArgumentException("Source and destination accounts cannot be identical");
         }
 
-        String debitSql = "UPDATE account SET balance = balance - ? WHERE account_number = ? AND balance >= ?";
+        // CHANGE: added "AND status = 'ACTIVE'" so a frozen/closed account can't send funds
+        String debitSql = "UPDATE account SET balance = balance - ? WHERE account_number = ? AND balance >= ? AND status = 'ACTIVE'";
         String creditSql = "UPDATE account SET balance = balance + ? WHERE account_number = ? AND status = 'ACTIVE'";
         String getBalSql = "SELECT balance FROM account WHERE account_number = ?";
         String insertTxnSql = "INSERT INTO transaction (account_number, txn_type, amount, resulting_balance, target_account, description) VALUES (?, ?, ?, ?, ?, ?)";
@@ -89,31 +126,27 @@ public class TransactionService {
         Connection con = null;
         try {
             con = DBConnection.getConnection();
-            // 1. Begin ACID Transaction
             con.setAutoCommit(false);
 
-            // 2. Debit Sender
             try (PreparedStatement psDebit = con.prepareStatement(debitSql)) {
                 psDebit.setBigDecimal(1, amount);
                 psDebit.setString(2, fromAccount);
                 psDebit.setBigDecimal(3, amount);
                 int rows = psDebit.executeUpdate();
                 if (rows == 0) {
-                    throw new SQLException("Debit failed: Insufficient funds or invalid source account.");
+                    throw new SQLException("Debit failed: insufficient funds, account frozen/closed, or invalid source account.");
                 }
             }
 
-            // 3. Credit Receiver
             try (PreparedStatement psCredit = con.prepareStatement(creditSql)) {
                 psCredit.setBigDecimal(1, amount);
                 psCredit.setString(2, toAccount);
                 int rows = psCredit.executeUpdate();
                 if (rows == 0) {
-                    throw new SQLException("Credit failed: Destination account not found or not ACTIVE.");
+                    throw new SQLException("Credit failed: destination account not found or not ACTIVE.");
                 }
             }
 
-            // 4. Retrieve new balance for audit trail
             BigDecimal fromNewBal = BigDecimal.ZERO;
             try (PreparedStatement psBal = con.prepareStatement(getBalSql)) {
                 psBal.setString(1, fromAccount);
@@ -128,7 +161,6 @@ public class TransactionService {
                 if (rs.next()) toNewBal = rs.getBigDecimal("balance");
             }
 
-            // 5. Insert Transaction Log for Sender
             try (PreparedStatement psTxn = con.prepareStatement(insertTxnSql)) {
                 psTxn.setString(1, fromAccount);
                 psTxn.setString(2, "TRANSFER");
@@ -139,7 +171,6 @@ public class TransactionService {
                 psTxn.executeUpdate();
             }
 
-            // 6. Insert Transaction Log for Receiver
             try (PreparedStatement psTxn = con.prepareStatement(insertTxnSql)) {
                 psTxn.setString(1, toAccount);
                 psTxn.setString(2, "DEPOSIT");
@@ -150,13 +181,11 @@ public class TransactionService {
                 psTxn.executeUpdate();
             }
 
-            // 7. Commit ACID Transaction
             con.commit();
             return true;
         } catch (SQLException e) {
             if (con != null) {
                 try {
-                    // Rollback on any failure to preserve consistency
                     con.rollback();
                     System.err.println("Transaction rolled back successfully due to: " + e.getMessage());
                 } catch (SQLException ex) {

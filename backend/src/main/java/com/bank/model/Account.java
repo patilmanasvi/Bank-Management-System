@@ -61,6 +61,10 @@ public abstract class Account {
         this.balance = this.balance.subtract(amount);
     }
 
+    protected synchronized void deduct(BigDecimal amount) {
+        this.balance = this.balance.subtract(amount);
+    }
+
     // Polymorphic method overridden by each specific account type
     public abstract BigDecimal calculateInterest();
     public abstract String getAccountType();

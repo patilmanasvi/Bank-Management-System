@@ -3,48 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Transaction History – Bank</title>
+  <title>Transaction History – Bank Management System</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>Bank</h1>
-    <div>Welcome, User | <a href="login.html" style="color:#fff;">Logout</a></div>
+    <h1>Bank Management System</h1>
+    <div>
+      <span id="headerRoleBadge" class="badge active" style="margin-right:6px;">CUSTOMER</span>
+      <span id="headerUser">Welcome, User | </span>
+      <a href="login.html" id="btnLogout">Logout</a>
+    </div>
   </header>
-  <nav class="sidebar">
-    <a href="dashboard.html">Dashboard</a>
-    <a href="deposit.html">Deposit</a>
-    <a href="withdraw.html">Withdraw</a>
-    <a href="transfer.html">Transfer</a>
-    <a href="transactions.html" class="active">Transaction History</a>
-  </nav>
+  <nav class="sidebar" id="mainSidebar"></nav>
   <main class="main-content">
     <h2>Transaction History</h2>
-    <form id="filterForm" style="margin-bottom:16px;">
-      <label for="startDate">From</label>
-      <input type="date" id="startDate" name="startDate" />
+    <p style="color:var(--color-secondary-text); margin-bottom: 20px; font-size: 14px;">
+      View all deposit, withdrawal, and transfer records. Use the filters below to narrow results by date or type.
+    </p>
 
-      <label for="endDate">To</label>
-      <input type="date" id="endDate" name="endDate" />
-
-      <label for="type">Type</label>
-      <select id="type" name="type">
-        <option value="all">All</option>
-        <option value="credit">Credit (+)</option>
-        <option value="debit">Debit (-)</option>
-      </select>
-
-      <button type="submit" class="secondary" style="margin-top:8px;">Apply Filters</button>
+    <form id="filterForm" style="background: #fff; padding: 18px 22px; border-radius: 8px; border: 1px solid #dde2e8; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 20px; display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap;">
+      <div>
+        <label for="startDate">From Date</label>
+        <input type="date" id="startDate" name="startDate" style="margin-bottom: 0;" />
+      </div>
+      <div>
+        <label for="endDate">To Date</label>
+        <input type="date" id="endDate" name="endDate" style="margin-bottom: 0;" />
+      </div>
+      <div>
+        <label for="type">Type</label>
+        <select id="type" name="type" style="margin-bottom: 0;">
+          <option value="all">All</option>
+          <option value="credit">Credit (+)</option>
+          <option value="debit">Debit (-)</option>
+        </select>
+      </div>
+      <div>
+        <button type="submit" class="secondary" style="margin-bottom: 0; padding: 9px 18px;">Apply Filters</button>
+      </div>
     </form>
+
     <table id="transactionsTable">
       <thead>
         <tr><th>Date</th><th>Description</th><th>Type</th><th class="amount">Amount</th><th>Balance</th></tr>
       </thead>
       <tbody>
-        <tr><td colspan="5">Loading transactions from MySQL database...</td></tr>
+        <tr><td colspan="5" style="text-align: center; color: #5B6B7E;">Loading transactions...</td></tr>
       </tbody>
     </table>
-    <p id="noResults" style="display:none; color:var(--color-secondary-text);">No transactions match the selected criteria.</p>
+    <p id="noResults" style="display:none; color:var(--color-secondary-text); margin-top: 12px;">No transactions match the selected criteria.</p>
   </main>
   <script src="app.js"></script>
 </body>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Open New Account – Bank Management System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Bank Management System</h1>
+    <div>
+      <span id="headerRoleBadge" class="badge active" style="margin-right:6px;">CUSTOMER</span>
+      <span id="headerUser">Welcome, User | </span>
+      <a href="login.html" id="btnLogout">Logout</a>
+    </div>
+  </header>
+  <nav class="sidebar" id="mainSidebar"></nav>
+  <main class="main-content">
+    <h2>Open a New Account</h2>
+    <p style="color:var(--color-secondary-text); margin-bottom: 20px; font-size: 14px;">
+      Existing bank customers can instantly open additional Savings, Current, or Fixed Deposit accounts.
+    </p>
+
+    <div style="background: #fff; padding: 24px 28px; border-radius: 8px; border: 1px solid #dde2e8; box-shadow: 0 1px 3px rgba(0,0,0,0.06); max-width: 520px;">
+      <form id="openAccountForm" style="padding: 0; border: none; box-shadow: none; margin-bottom: 0;">
+        <label for="accType">Account Type</label>
+        <select id="accType" name="accType" required>
+          <option value="SAVINGS">Savings Account (4.0% interest - Min Deposit 1,000)</option>
+          <option value="CURRENT">Current Account (Overdraft support - Min Deposit 5,000)</option>
+          <option value="FIXED_DEPOSIT">Fixed Deposit (7.5% interest - Min Deposit 10,000)</option>
+        </select>
+
+        <label for="initialDeposit">Initial Deposit Amount (INR)</label>
+        <input type="number" id="initialDeposit" name="initialDeposit" min="1000" step="100" placeholder="e.g. 5000" required />
+
+        <label for="accBranch">Bank Branch</label>
+        <select id="accBranch" name="accBranch">
+          <option value="1">Nariman Point Branch (Mumbai)</option>
+          <option value="2">Connaught Place Branch (New Delhi)</option>
+          <option value="3">MG Road Branch (Bangalore)</option>
+          <option value="4">FC Road Branch (Pune)</option>
+        </select>
+
+        <button type="submit" style="width: 100%; margin-top: 6px;">Open Account Now</button>
+      </form>
+      <div id="openAccResult" style="display:none; margin-top:16px; padding:12px; border-radius:6px;"></div>
+    </div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

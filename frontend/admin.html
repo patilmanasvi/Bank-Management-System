@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin & Employee Portal – Bank Management System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Bank Management System</h1>
+    <div>
+      <span id="headerRoleBadge" class="badge pending" style="margin-right:6px;">STAFF</span>
+      <span id="headerUser">Welcome, Staff | </span>
+      <a href="login.html" id="btnLogout">Logout</a>
+    </div>
+  </header>
+  <nav class="sidebar" id="mainSidebar"></nav>
+  <main class="main-content">
+    <h2>Staff Administration Panel</h2>
+    <p style="color:var(--color-secondary-text); margin-bottom: 20px; font-size: 14px;">
+      View customer accounts, inspect live balances, and manage account statuses (Freeze or Activate).
+    </p>
+
+    <div style="background: #fff; padding: 18px 22px; border-radius: 8px; border: 1px solid #dde2e8; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 style="margin-bottom: 0;">Customer Accounts Directory</h3>
+        <button id="btnRefreshAccounts" class="secondary small">Refresh Accounts</button>
+      </div>
+
+      <table id="adminAccountsTable">
+        <thead>
+          <tr>
+            <th>Account Number</th>
+            <th>Customer Name</th>
+            <th>Account Type</th>
+            <th class="amount">Balance</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="6" style="text-align: center; color: #5B6B7E;">Loading accounts from database...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
