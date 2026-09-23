@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bank Management System - Project Presentation</title>
+  <style>
+    :root {
+      --color-navy: #0B2545;
+      --color-blue: #1D4E89;
+      --color-accent: #2A6FC9;
+      --color-bg: #F7F8FA;
+      --color-surface: #FFFFFF;
+      --color-border: #DDE2E8;
+      --color-text: #0B2545;
+      --color-muted: #5B6B7E;
+      --color-green: #1F7A4D;
+      --color-green-bg: #E6F4EA;
+      --color-red: #B3261E;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #111827;
+      color: var(--color-text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .deck-container {
+      width: 90vw;
+      max-width: 1200px;
+      height: 75vh;
+      max-height: 675px;
+      background: var(--color-bg);
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      padding: 32px 40px;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .slide.active { display: flex; }
+
+    /* Header for inner slides */
+    .slide-header {
+      border-bottom: 2px solid var(--color-border);
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+    }
+    .slide-header h2 {
+      font-size: 24px;
+      color: var(--color-navy);
+      font-weight: 700;
+    }
+    .slide-header p {
+      font-size: 13px;
+      color: var(--color-muted);
+      margin-top: 4px;
+    }
+
+    /* Grid cards */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .card h3 {
+      font-size: 15px;
+      color: var(--color-navy);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .card p, .card li {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #2D3748;
+    }
+    .card ul { margin-left: 18px; }
+
+    /* Dark Slide (Title & Conclusion) */
+    .slide.dark {
+      background: var(--color-navy);
+      color: #FFFFFF;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px;
+    }
+    .slide.dark h1 { font-size: 40px; margin-bottom: 12px; }
+    .slide.dark h2 { font-size: 28px; color: #FFFFFF; }
+    .slide.dark p { color: #C0D4EC; font-size: 15px; max-width: 800px; }
+
+    /* Navigation Toolbar */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 90vw;
+      max-width: 1200px;
+      margin-top: 14px;
+      color: #9CA3AF;
+      font-size: 13px;
+    }
+    .nav-btn {
+      background: var(--color-blue);
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .nav-btn:hover { background: var(--color-accent); }
+  </style>
+</head>
+<body>
+
+  <div class="deck-container">
+
+    <!-- Slide 1: Title -->
+    <div class="slide dark active">
+      <div style="width:50px; height:4px; background:var(--color-accent); margin-bottom:16px;"></div>
+      <h1>Bank Management System</h1>
+      <p style="font-size:17px; margin-bottom:28px;">An Enterprise 3-Tier Banking System Demonstrating Advanced OOP, 3NF Relational DBMS & ACID Transactions</p>
+      
+      <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:16px 28px; text-align:left; max-width:680px;">
+        <p style="color:#fff; font-size:13px; line-height:1.7;">
+          <strong>Course:</strong> Object-Oriented Programming & DBMS Lab<br>
+          <strong>Stack:</strong> Java 11+ REST Backend | MySQL 8.0 (12 Tables in 3NF) | Vanilla JS Frontend<br>
+          <strong>Domain:</strong> Retail Banking, ACID Inter-Account Transfers, KYC Records & Loan Approvals
+        </p>
+      </div>
+    </div>
+
+    <!-- Slide 2: Problem Statement & Objectives -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Problem Statement & Project Objectives</h2>
+        <p>Addressing architectural bottlenecks in traditional student banking systems</p>
+      </div>
+      <div class="grid-2">
+        <div class="card" style="border-left: 4px solid var(--color-red);">
+          <h3 style="color:var(--color-red);">Challenges in Traditional Systems</h3>
+          <ul>
+            <li><strong>High UI-Database Coupling:</strong> Direct SQL queries in UI classes create security and maintenance vulnerabilities.</li>
+            <li><strong>Concurrency Flaws:</strong> Without transaction boundaries, simultaneous transfers create race conditions and dirty reads.</li>
+            <li><strong>Unnormalized Schemas:</strong> Redundant branch and customer data leads to update and deletion anomalies.</li>
+          </ul>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--color-green);">
+          <h3 style="color:var(--color-green);">Our Core Objectives</h3>
+          <ul>
+            <li><strong>Decoupled 3-Tier Layering:</strong> Strict separation of Presentation, Java Services, and MySQL Database.</li>
+            <li><strong>Guaranteed ACID Transactions:</strong> All-or-nothing atomic fund transfers with automated rollback.</li>
+            <li><strong>Strict 3NF Normalization:</strong> 12 relational tables with zero transitive dependencies.</li>
+            <li><strong>Role-Based Access Control:</strong> Fine-grained permission model for Customer, Staff, and Admin.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: 3-Tier Architecture -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>3-Tier System Architecture</h2>
+        <p>Decoupled request/response pipeline from user browser to disk storage</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div class="card" style="border-left: 5px solid var(--color-blue);">
+          <h3>1. Presentation Layer (Web Portal & Desktop GUI)</h3>
+          <p>Vanilla HTML5, CSS3, ES6 JavaScript Web Portal and Java Swing GUI. Communicates with backend via asynchronous HTTP REST JSON requests (fetch API).</p>
+        </div>
+        <div class="card" style="border-left: 5px solid var(--color-accent);">
+          <h3>2. Application & Business Layer (Java Backend)</h3>
+          <p>Embedded Java HTTP Server (Port 8080) routing to TransactionService, LoanService, and AccountService. Domain OOP models enforce financial rules and concurrency monitors.</p>
+        </div>
+        <div class="card" style="border-left: 5px solid var(--color-navy);">
+          <h3>3. Database Layer (MySQL 8.0 InnoDB Engine)</h3>
+          <p>12 Normalized 3NF tables. Enforces foreign key constraints, CHECK (balance >= 0) rules, row-level locks, and ACID transaction commits.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: OOP Deep Dive -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Object-Oriented Programming (OOP) Deep Dive</h2>
+        <p>Real-world implementation of the four OOP pillars in Java</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Encapsulation</h3>
+          <p>All sensitive financial state (balance, accountNumber) is protected/private. Direct edits are blocked; mutations require synchronized methods with BigDecimal precision.</p>
+        </div>
+        <div class="card">
+          <h3>Inheritance</h3>
+          <p><strong>Person</strong> base class extended by Customer and Employee.<br><strong>Account</strong> base class extended by SavingsAccount, CurrentAccount, and FixedDepositAccount.</p>
+        </div>
+        <div class="card">
+          <h3>Polymorphism</h3>
+          <p>Method overriding on <code>withdraw()</code>: SavingsAccount enforces minimum balance, CurrentAccount allows overdraft, and FixedDepositAccount blocks early withdrawal.</p>
+        </div>
+        <div class="card">
+          <h3>Abstraction</h3>
+          <p>Abstract class <code>Account</code> prevents generic instantiation (<code>new Account()</code> is prohibited) while forcing concrete subclasses to implement interest and withdrawal policies.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Database Design & 3NF Normalization -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Database Design & 3NF Normalization</h2>
+        <p>12 Relational Tables in Third Normal Form in MySQL</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>12 Normalized Tables</h3>
+          <ul style="font-size:12.5px;">
+            <li><strong>branch:</strong> Locations & IFSC codes</li>
+            <li><strong>customer:</strong> KYC, PAN & contact data</li>
+            <li><strong>employee:</strong> Staff designations & salary</li>
+            <li><strong>account & account_type:</strong> Master accounts & rates</li>
+            <li><strong>transaction:</strong> Immutable debit/credit audit trail</li>
+            <li><strong>loan & loan_type:</strong> Applications & interest rates</li>
+            <li><strong>login:</strong> Role-based credentials</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>3NF Integrity Guarantees</h3>
+          <ul>
+            <li><strong>1NF:</strong> All columns store atomic values without repeating groups.</li>
+            <li><strong>2NF:</strong> No partial dependencies on composite keys.</li>
+            <li><strong>3NF:</strong> Eliminated transitive dependencies (branch details isolated in branch table).</li>
+            <li><strong>Constraints:</strong> <code>CHECK (balance >= 0)</code> and <code>CHECK (status IN ('ACTIVE','FROZEN','CLOSED'))</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: ACID Transactions -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>ACID Transactions & Concurrency Control</h2>
+        <p>Ensuring atomic financial consistency during inter-account transfers</p>
+      </div>
+      <div class="card" style="margin-bottom:14px; background:#eef4fb;">
+        <h3 style="color:var(--color-blue);">Transaction Execution Flow (TransactionService.java)</h3>
+        <p style="font-family:monospace; font-size:12px;">conn.setAutoCommit(false) ➔ Row Lock (SELECT ... FOR UPDATE) ➔ Debit Sender ➔ Credit Receiver ➔ Audit Log ➔ conn.commit()</p>
+        <p style="color:var(--color-red); font-size:12px; margin-top:4px;"><strong>On Error:</strong> conn.rollback() returns database to original state with zero partial balances.</p>
+      </div>
+      <div class="grid-4">
+        <div class="card"><h3>Atomicity</h3><p>Both debit and credit succeed together, or both rollback completely.</p></div>
+        <div class="card"><h3>Consistency</h3><p>System invariants and non-negative balance checks are preserved.</p></div>
+        <div class="card"><h3>Isolation</h3><p>InnoDB row locks prevent lost updates during concurrent operations.</p></div>
+        <div class="card"><h3>Durability</h3><p>Committed records are written to MySQL Redo Log (WAL) on disk.</p></div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Frontend Architecture -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Frontend Architecture & User Experience</h2>
+        <p>Clean, student-made, responsive vanilla web design</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Design System</h3>
+          <p>• Palette: Deep Navy (<code>#0B2545</code>), Pure White Cards, Soft Borders (<code>#DDE2E8</code>).<br>• Softened 8px rounded corners across all cards, inputs, and tables.<br>• 100% clean, professional labels with zero distracting emojis.<br>• Clean Segoe UI typography with clear information hierarchy.</p>
+        </div>
+        <div class="card">
+          <h3>Dynamic Role-Aware Sidebar</h3>
+          <p>• Dynamically renders navigation links matching logged-in role.<br>• Collapsible Sidebar with smooth 0.25s CSS transitions.<br>• User preference (◂/▸) persisted in <code>localStorage</code> across pages.<br>• Route guards strictly block unauthorized customer access to Admin panel.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Customer Features -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Customer Banking Portal Features</h2>
+        <p>Self-service banking operations for account holders</p>
+      </div>
+      <div class="grid-3">
+        <div class="card"><h3>Live Dashboard</h3><p>Balance summary card with INR formatting, quick-action buttons, and recent transactions table.</p></div>
+        <div class="card"><h3>Deposit & Withdraw</h3><p>Real-time crediting and debiting with instant validation preventing negative balances.</p></div>
+        <div class="card"><h3>Atomic Fund Transfer</h3><p>Instant inter-account transfer with automatic debit/credit reconciliation in MySQL.</p></div>
+        <div class="card"><h3>Open New Account</h3><p>Instant opening of additional Savings (4%), Current (Overdraft), or Fixed Deposit (7.5%) accounts.</p></div>
+        <div class="card"><h3>Loan Applications</h3><p>Apply for Home, Personal, Car, or Education loans with customizable tenure and interest calculation.</p></div>
+        <div class="card"><h3>KYC & Profile Settings</h3><p>Inspect verified PAN/DOB records, update contact info (Phone, Email, Address), and change password.</p></div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Staff & Admin Features -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Staff & Admin Management Panel</h2>
+        <p>Operational control center for bank staff and administrators</p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Accounts Directory</h3>
+          <p>Comprehensive overview of all customer accounts, live balances across branches, and operational statuses (ACTIVE / FROZEN).</p>
+        </div>
+        <div class="card">
+          <h3>Account Freeze / Activate</h3>
+          <p>One-click security freeze on suspicious accounts. Frozen accounts are immediately locked out from withdrawals and transfers at API and DB layers.</p>
+        </div>
+        <div class="card">
+          <h3>Loan Approval System</h3>
+          <p>Staff review pending loan applications (amount, category, tenure) and execute single-click Approve / Reject actions with real-time MySQL updates.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Audit Logging -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Audit Logging & Transaction History</h2>
+        <p>Immutable financial ledger with server-side query filters</p>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Immutable Financial Audit Trail</h3>
+        <p>Every deposit, withdrawal, and transfer is logged into the transaction table with immutable timestamps and before/after balance tracking. Records can never be overwritten.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Date Range Search Filters</h3>
+          <p>Auditors can filter transactions between specific start and end dates (From Date / To Date). Backend safely constructs parameterized SQL date queries.</p>
+        </div>
+        <div class="card">
+          <h3>Transaction Type Classification</h3>
+          <p>Instant classification by Credit (+) or Debit (-). Color-coded badges and monospace amount formatting allow quick audit verification.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 11: Testing -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>System Testing & Automated Verification</h2>
+        <p>22-step End-to-End and API test suite validating system integrity</p>
+      </div>
+      <div class="grid-2">
+        <div class="card" style="background:var(--color-green-bg); border-color:var(--color-green); text-align:center;">
+          <h3 style="color:var(--color-green); font-size:20px;">Test Results</h3>
+          <p style="font-size:48px; font-weight:700; color:var(--color-green); margin:12px 0;">22 / 22</p>
+          <p style="color:var(--color-green); font-weight:700; font-size:16px;">PASSED (100% SUCCESS)</p>
+          <p style="font-size:12px; margin-top:8px;">Zero failures across all integration suites.</p>
+        </div>
+        <div class="card">
+          <h3>Validated Test Categories</h3>
+          <ul style="font-size:12.5px;">
+            <li><strong>Authentication & Sessions:</strong> Valid/invalid credential validation with HTTP 200/401.</li>
+            <li><strong>Deposit & Withdraw Accuracy:</strong> Mathematical balance consistency in MySQL.</li>
+            <li><strong>Atomic Transfers:</strong> Simultaneous sender debit & receiver credit consistency.</li>
+            <li><strong>Bad Input Sanitization:</strong> Non-numeric/negative payloads rejected with clean HTTP 400.</li>
+            <li><strong>Filtered History:</strong> Type-specific and date-specific history query validation.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 12: Tech Stack -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Technology Stack & Development Tools</h2>
+        <p>Standard, high-performance tools with zero unnecessary third-party overhead</p>
+      </div>
+      <div class="grid-4">
+        <div class="card">
+          <h3 style="color:var(--color-navy);">Backend</h3>
+          <p>• Java 11+<br>• Core OOP Models<br>• Embedded HttpServer<br>• Connector/J 8.3.0</p>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--color-blue);">Database</h3>
+          <p>• MySQL 8.0 Server<br>• InnoDB Storage<br>• 12 Tables in 3NF<br>• ACID Row Locks</p>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--color-accent);">Frontend</h3>
+          <p>• Semantic HTML5<br>• CSS3 Custom Props<br>• Vanilla ES6 JS<br>• fetch() REST Client</p>
+        </div>
+        <div class="card">
+          <h3 style="color:#3F51B5;">Tools</h3>
+          <p>• VS Code & Terminal<br>• Git & GitHub<br>• MySQL Workbench<br>• Batch Automation</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 13: Thank You & Conclusion -->
+    <div class="slide dark">
+      <h1 style="font-size:36px; margin-bottom:14px;">Project Conclusion & Live Demo</h1>
+      <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:16px 28px; text-align:left; max-width:680px; margin-bottom:24px;">
+        <p style="color:#fff; font-size:13px; line-height:1.7;">
+          • Built a fully functional 3-tier banking system from scratch.<br>
+          • Successfully bridged Java OOP models with a 3NF relational database.<br>
+          • Enforced strict ACID transactional integrity on all financial operations.<br>
+          • Verified 100% test pass rate across 22 automated end-to-end tests.
+        </p>
+      </div>
+      <h2 style="font-size:32px; color:#fff; margin-bottom:8px;">Thank You!</h2>
+      <p style="font-size:16px; color:#A0B8D8;">We are now ready for Questions & Live Demonstration</p>
+      <p style="font-family:monospace; font-size:13px; color:#C0D4EC; margin-top:12px;">github.com/patilmanasvi/Bank-Management-System</p>
+    </div>
+
+  </div>
+
+  <!-- Navigation Toolbar -->
+  <div class="controls">
+    <button class="nav-btn" onclick="prevSlide()">&#9664; Previous</button>
+    <span id="slideIndicator">Slide 1 of 13</span>
+    <button class="nav-btn" onclick="nextSlide()">Next &#9654;</button>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const indicator = document.getElementById('slideIndicator');
+
+    function showSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+      slides[currentSlide].classList.remove('active');
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+      indicator.innerText = `Slide ${currentSlide + 1} of ${slides.length}`;
+    }
+
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+  </script>
+</body>
+</html>
