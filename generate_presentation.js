@@ -137,7 +137,11 @@ function addImageFrame(slide, x, y, w, h, label, note) {
   });
 
   // Right Frame: Hero Image / Logo Space
-  addImageFrame(slide, 7.9, 3.4, 4.6, 3.4, 'PROJECT LOGO / UI PREVIEW', 'Insert College Logo or Dashboard Mockup');
+  slide.addImage({
+    path: 'assets/login_screenshot.png',
+    x: 7.9, y: 3.4, w: 4.6, h: 3.4,
+    sizing: { type: 'contain' }
+  });
 }
 
 // ==========================================
@@ -372,7 +376,11 @@ function addImageFrame(slide, x, y, w, h, label, note) {
   });
 
   // Right Side: UI Screenshot Frame
-  addImageFrame(slide, 7.0, 1.25, 5.5, 5.5, 'LOGIN & DASHBOARD UI SCREENSHOT', 'Paste Screenshot of login.html and dashboard.html');
+  slide.addImage({
+    path: 'assets/login_screenshot.png',
+    x: 7.0, y: 1.25, w: 5.5, h: 5.5,
+    sizing: { type: 'contain' }
+  });
 }
 
 // ==========================================
